@@ -3,6 +3,7 @@ import { Schibsted_Grotesk, Martian_Mono, JetBrains_Mono } from "next/font/googl
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import LightRays from './components/LightRays';
+import Navbar from "./components/Navbar";
 
 const jetbrainsMono = JetBrains_Mono({subsets:['latin'],variable:'--font-mono'});
 
@@ -32,6 +33,9 @@ export default function RootLayout({
       className={cn("h-full", "antialiased", schibstedGrotesk.variable, martianMono.variable, "font-mono", jetbrainsMono.variable)}
     >
       <body className="min-h-full flex flex-col">
+
+        <Navbar />
+
           <div className="absolute inset-0 top-0 z-[-1] min-h-screen">
                 <LightRays
                 raysOrigin="top-center-offset"
