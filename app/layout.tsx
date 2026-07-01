@@ -4,6 +4,9 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import LightRays from './components/LightRays';
 import Navbar from "./components/Navbar";
+import { PostHogProvider } from "./components/PostHogProvider";
+import { Suspense } from "react";
+import { PostHogPageView } from "./components/PostHogPageView";
 
 const jetbrainsMono = JetBrains_Mono({subsets:['latin'],variable:'--font-mono'});
 
@@ -33,8 +36,12 @@ export default function RootLayout({
       className={cn("h-full", "antialiased", schibstedGrotesk.variable, martianMono.variable, "font-mono", jetbrainsMono.variable)}
     >
       <body className="min-h-full flex flex-col">
+        <PostHogProvider>
+          <Suspense fallback={null}>
+            <PostHogPageView />
+          </Suspense>
 
-        <Navbar />
+          <Navbar />
 
           <div className="absolute inset-0 top-0 z-[-1] min-h-screen">
                 <LightRays
@@ -53,7 +60,7 @@ export default function RootLayout({
                 />
           </div>
           <main>{children}</main>
-
+        </PostHogProvider>
       </body>
     </html>
   );
