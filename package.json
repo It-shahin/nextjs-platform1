@@ -11,8 +11,9 @@
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
     "class-variance-authority": "^0.7.1",
+    "cloudinary": "^2.10.0",
     "clsx": "^2.1.1",
-    "mongodb": "^7.4.0",
+    "mongodb": "^7.5.0",
     "mongoose": "^9.7.4",
     "next": "16.3.0-canary.69",
     "ogl": "^1.0.11",
