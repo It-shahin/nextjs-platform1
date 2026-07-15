@@ -4,6 +4,8 @@ import BookEvent from '@/app/components/BookEvent';
 import { getSimilarEventsBySlug } from '@/lib/actions/event.actions';
 import { IEvent } from '@/database/event.model';
 import EventCard from '@/app/components/EventCard';
+import { cacheLife } from 'next/cache';
+
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -34,18 +36,33 @@ const EventTags = ({ tags }: { tags: string[]}) => (
     ))}
   </div>
 )
-  
 
-const EventDetailsPage = async ( {params }: {params: Promise<{slug: string}>}) => {
-  const { slug } = await params;
-  const request = await fetch(`${BASE_URL}/api/events/${slug}`);
-  
+export const instant = false
 
 
-  const {event: {description, image, overview, date, time, location, mode, agenda, audience, organizer, tags}} = await request.json();
+const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> }) => { 
 
 
-  if (!description) return notFound();
+const { slug } = await params;
+const request = await fetch(`${BASE_URL}/api/events/${slug}`);
+const { event } = await request.json();
+
+if (!event) return notFound();
+
+const {
+  _id,
+  description,
+  image,
+  overview,
+  date,
+  time,
+  location,
+  mode,
+  agenda,
+  audience,
+  organizer,
+  tags,
+} = event;
 
   const bookings =10;
 
@@ -101,7 +118,7 @@ const EventDetailsPage = async ( {params }: {params: Promise<{slug: string}>}) =
                   </p>
                 )}
 
-                <BookEvent />
+                <BookEvent eventId={String(_id)} slug={slug} />
 
               </div>
             </aside>
