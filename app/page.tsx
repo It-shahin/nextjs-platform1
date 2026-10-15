@@ -10,6 +10,15 @@ const page = async () => {
   'use cache';
   cacheLife('hours');
 
+if (!process.env.MONGODB_URI || !BASE_URL) {
+  return (
+    <main className="mx-auto max-w-xl px-6 py-24 text-center">
+      <h1 className="text-3xl font-semibold">Events are coming soon</h1>
+      <p className="mt-4">This workspace is waiting for its service setup. Please check back soon.</p>
+    </main>
+  );
+}
+
 const response = await fetch(`${BASE_URL}/api/events`);
 const { events } = await response.json();
 
