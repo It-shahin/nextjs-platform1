@@ -128,7 +128,7 @@ const {
         <h2>Similar Events</h2>
         <div className="events">
             {similarEvents.length > 0 && similarEvents.map((similarEvent: IEvent) => (
-              <EventCard key={similarEvent._id} {...similarEvent} />
+              <EventCard key={String(similarEvent._id)} {...similarEvent} />
             ))}
         </div>
       </div>
@@ -137,3 +137,4 @@ const {
 };
 
 export default EventDetailsPage;
+

@@ -1,16 +1,14 @@
-import { IEvent } from '@/database/event.model';
+import Event from '@/database/event.model';
+import connectDB from '@/lib/mongodb';
 import ExploreBtn from '../components/ExploreBtn'
 import EventCard from './components/EventCard'
-import events from '@/lib/constants';
 import { cacheLife } from 'next/cache';
-
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 
 const page = async () => {
   'use cache';
   cacheLife('hours');
 
-if (!process.env.MONGODB_URI || !BASE_URL) {
+if (!process.env.MONGODB_URI) {
   return (
     <main className="mx-auto max-w-xl px-6 py-24 text-center">
       <h1 className="text-3xl font-semibold">Events are coming soon</h1>
@@ -19,8 +17,11 @@ if (!process.env.MONGODB_URI || !BASE_URL) {
   );
 }
 
-const response = await fetch(`${BASE_URL}/api/events`);
-const { events } = await response.json();
+await connectDB();
+const events = await Event.find()
+  .sort({ createdAt: -1 })
+  .select('title image slug location date time -_id')
+  .lean();
 
   return (
     <section>
@@ -35,15 +36,17 @@ const { events } = await response.json();
         <h3>Featured Events</h3>
 
         <ul className="events">
-          {events && events.length > 0 && events.map((event : IEvent) => (
+          {events.map((event) => (
             <li key={event.title} className="list-none">
               <EventCard {...event} />
             </li>
           ))}
         </ul>
+        {events.length === 0 && <p>No events yet. Check back soon.</p>}
       </div>
     </section>
   )
 }
 
 export default page
+
